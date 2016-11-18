@@ -3,23 +3,29 @@
 
 import javax.swing.JPanel;
 import java.awt.*;
+import java.awt.Color;
+import java.util.ArrayList;
 
 
-public class Picture extends JPanel implements Runnable {
+public class Picture extends JPanel implements Runnable , KeyListener {
 
 
 
 public static final int WIDTH = 750 , HEIGHT = 550;
 private boolean running = false;
 private Thread thread;
-
+ArrayList<Ball>balls[];
+ArrayList<Snake>snakes[];
 private Snake s;
+private boolean up = false  , down = false , left = false , right = true;
+
 
 
 
 public Picture () {
     setPreferredSize(new Dimension(WIDTH , HEIGHT));
-
+     
+    
     
     start();
 
@@ -41,6 +47,8 @@ public Picture () {
    		g.drawLine(0,i*10,WIDTH,i*10);
    	}
    	
+   	
+   	
     
    	
    }
@@ -52,7 +60,7 @@ public Picture () {
    
    public void stop()
    {
-   	
+   	running = false;
    }
    
    public void run()
@@ -65,8 +73,46 @@ public Picture () {
    
    public void tick ()
    {
-   	System.out.println("hi");
+   	
    }
+   
+   public void  KeyPressed(KeyEvent e)
+   {
+   	int key = e.getKeyCode();
+   
+   	if(key == KeyEvent.VK_LEFT)
+   		{
+   		up = false;
+   		down = false;
+   		left = true;
+   		right = false;
+     	}
+     	if(key == KeyEvent.VK_RIGHT)
+   		{
+   		up = false;
+   		down = false;
+   		left = false;
+   		right = true;
+     	}
+     	
+     	if(key == KeyEvent.VK_UP)
+   		{
+   		up = true;
+   		down = false;
+   		left = false;
+   		right = false;
+     	}
+     	
+     if(key == KeyEvent.VK_DOWN)
+   		{
+   		up = false;
+   		down = true;
+   		left = false;
+   		right = false;
+     	}
+     
+   }
+   
    
    public static void main(String args[])
    {
@@ -76,3 +122,4 @@ public Picture () {
 
 
 }
+
