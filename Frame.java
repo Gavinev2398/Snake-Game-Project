@@ -5,6 +5,9 @@
 
 import java.awt.GridLayout;
 import javax.swing.JFrame;
+import java.awt.Component;
+
+
 
 
 public class Frame extends JFrame {
@@ -13,18 +16,24 @@ public class Frame extends JFrame {
 	    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(" Snake Game ");
 		setLocationRelativeTo(null);
+	    setResizable(false);
 
 
 		init();
 	}
 	
 	public void init() {
-		setLayout(new GridLayout (1,0,1,0));
+		setLayout(new GridLayout (1,1,0,0));
+	
+		
 
-		Picture p1 = new Picture();
-		add(p1);
 
-		pack();   /* Found this method so that the JFrame would go to the setPreffered Size  http://stackoverflow.com/questions/11939028/setpreferredsize-does-not-work */
+		Game g = new Game();
+		add(g);
+
+
+
+	   pack();   /* Found this method so that the JFrame would go to the setPreffered Size  http://stackoverflow.com/questions/11939028/setpreferredsize-does-not-work */
 	
 	
 		
