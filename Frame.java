@@ -5,7 +5,7 @@
 
 import java.awt.GridLayout;
 import javax.swing.JFrame;
-import java.awt.Component;
+
 
 
 
@@ -24,7 +24,8 @@ public class Frame extends JFrame {
 	
 	public void init() {
 		setLayout(new GridLayout (1,1,0,0));
-	
+
+
 		
 
 

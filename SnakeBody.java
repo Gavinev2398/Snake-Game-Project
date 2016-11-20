@@ -30,9 +30,8 @@ public class SnakeBody {
 		public void draw(Graphics g)
 		{
 			g.setColor(Color.BLUE);
-			g.fillRect(xCoordinate * width , yCoordinate * height  , width , height);
-			g.setColor(Color.GREEN);
-			g.fillRect(xCoordinate * width + 2 , yCoordinate * height + 2 , width -4 , height -4);
+			g.fillRect(xCoordinate  , yCoordinate  , width , height);
+		
 		    
 		}
 		
