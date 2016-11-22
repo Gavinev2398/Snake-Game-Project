@@ -1,4 +1,4 @@
-//SnakeBody.java
+  //SnakeBody.java
 
 /* This class will create the snake class */
 
@@ -14,15 +14,23 @@ public class SnakeBody {
 	
 
 	
-	public SnakeBody (int xCoordinate , int yCoordinate , int size ) {
+	public SnakeBody (int xCoordinate , int yCoordinate , int blocksize ) {
 		this.xCoordinate = xCoordinate;
 		this.yCoordinate = yCoordinate;
-		this.width = size;
-		this.height = size;
+		this.width = blocksize;
+		this.height = blocksize;
 		
 	}
 	
-	
+
+	public void tick() {
+
+	}
+
+
+
+
+
 
 	
 	  
@@ -30,7 +38,8 @@ public class SnakeBody {
 		public void draw(Graphics g)
 		{
 			g.setColor(Color.BLUE);
-			g.fillRect(xCoordinate  , yCoordinate  , width , height);
+			g.fillRect(xCoordinate * width , yCoordinate * height  , width , height);
+
 		
 		    
 		}

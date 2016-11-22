@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.*;
 import java.awt.Graphics;
 
@@ -13,7 +14,8 @@ import java.awt.Graphics;
 
 
 
-public class Game extends JPanel implements Runnable ,  EventListener {
+
+public class Game extends JPanel implements Runnable {
 
 
 	public static final int WIDTH = 750, HEIGHT = 550;
@@ -21,18 +23,28 @@ public class Game extends JPanel implements Runnable ,  EventListener {
 	private Thread thread;
 	private SnakeBody s;
 	private ArrayList<SnakeBody> snake;
-	private int xCoordinate = 30, yCoordinate = 30;
-	private int size = 10;
-	private int ticks = 0;
+	private ArrayList<Ball> balls;
+	private Ball b;
+	private int xCoordinate = 40, yCoordinate = 30;
+	private int size = 5;
+	private int speed = 0;
+	private Random rand;
 	private boolean up = false, down = false, left = false, right = true;
+	private Key key;
 
 
 	public Game() {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		setFocusable(true); // needed for the JPanel to focus on the key Listener http://www.java-gaming.org/index.php/topic,25909. */
+		setLayout(new GridLayout(1, 1, 0, 0));
 
 		snake = new ArrayList<SnakeBody>();
+		balls = new ArrayList<Ball>();
+		key = new Key();
+		addKeyListener(key);
 
 
+		rand = new Random();
 		start();
 
 
@@ -41,35 +53,55 @@ public class Game extends JPanel implements Runnable ,  EventListener {
 	public void tick()
 
 	{
+
+
 		if (snake.size() == 0) {
-			s = new SnakeBody(xCoordinate, yCoordinate,10);
-			snake.add(s);
-
-		}
-		ticks++;
-
-		if (ticks > 10000) {
-			if (up) yCoordinate--;
-			if (down) yCoordinate++;
-			if (right) xCoordinate++;
-			if (left) xCoordinate--;
-
-           ticks=0;
 			s = new SnakeBody(xCoordinate, yCoordinate, 10);
 			snake.add(s);
 
 		}
 
-		if (snake.size() > size) {
-			snake.remove(0);
-		}
+		if (balls.size() == 0) {
 
+			int xCoordinate = rand.nextInt(80);
+			int yCoordinate = rand.nextInt(40);
+
+			b = new Ball(xCoordinate, yCoordinate, 10);
+			balls.add(b);
+
+
+		}
+          for(int i = 0;i < balls.size();i++) {
+			  if (xCoordinate == balls.get(i).getxCoord() && yCoordinate == balls.get(i).getyCoord()) {
+
+				  balls.remove(i);
+				  i--;
+			  }
+		  }
+
+		speed++;
+
+		if (speed > 25000) {
+			if (up) yCoordinate--;
+			if (down) yCoordinate++;
+			if (right) xCoordinate++;
+			if (left) xCoordinate--;
+
+			speed = 0;
+			s = new SnakeBody(xCoordinate, yCoordinate, 10);
+			snake.add(s);
+
+
+			if (snake.size() > size) {
+				snake.remove(0);
+			}
+		}
 
 	}
 
 	public void paint(Graphics g) {
 
-		g.clearRect(0,0,WIDTH,HEIGHT);   /* Snake was filling up boxes as it was moving so I used the clear Rectangle method https://docs.oracle.com/javase/7/docs/api/java/awt/Graphics.html */
+		g.clearRect(0, 0, WIDTH, HEIGHT);
 		g.setColor(Color.RED);
 
 
@@ -83,6 +115,10 @@ public class Game extends JPanel implements Runnable ,  EventListener {
 
 		for (int i = 0; i < snake.size(); i++) {
 			snake.get(i).draw(g);
+		}
+
+		for (int i = 0; i < balls.size(); i++) {
+			balls.get(i).draw(g);
 		}
 
 
@@ -104,17 +140,57 @@ public class Game extends JPanel implements Runnable ,  EventListener {
 
 	}
 
-	public void keyPressed(KeyEvent e)    /* key listener https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyListener.html */ {
-		if (e.getKeyCode() == KeyEvent.VK_UP && !down) {
-			up = true;
-			down = false;
-			left = false;
-			right = false;
+	private class Key implements KeyListener {
+
+
+
+		public void keyPressed(KeyEvent e)    /* key listener https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyListener.html */ {
+			int key = e.getKeyCode();
+
+
+			if (key == KeyEvent.VK_UP && !down) {
+				up = true;
+				left = false;
+				right = false;
+
+			}
+
+			if (key == KeyEvent.VK_DOWN && !up) {
+				down = true;
+				left = false;
+				right = false;
+
+			}
+
+			if (key == KeyEvent.VK_RIGHT && !left) {
+				up = false;
+				down = false;
+				right = true;
+
+			}
+
+			if (key == KeyEvent.VK_LEFT && !right) {
+				up = false;
+				down = false;
+				left = true;
+
+
+			}
 
 		}
 
+		public void keyReleased(KeyEvent e) {
+
+		}
+
+		public void keyTyped(KeyEvent e) {
+
+		}
 
 	}
 
 }
+
+
+
 

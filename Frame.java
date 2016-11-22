@@ -23,7 +23,7 @@ public class Frame extends JFrame {
 	}
 	
 	public void init() {
-		setLayout(new GridLayout (1,1,0,0));
+		setLayout(new GridLayout(1, 1, 0, 0));
 
 
 		
@@ -46,6 +46,9 @@ public class Frame extends JFrame {
 	public static void main(String args[])
 	{
              new Frame();
+
+
+
 	}
 	
 	

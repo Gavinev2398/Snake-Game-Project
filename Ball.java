@@ -12,20 +12,44 @@ import java.awt.Graphics;
 public class Ball  {
 	
 	
-	private int xCoor , yCoor , width , height;
-	
-	
-	public Ball(int xCoor , int yCoor , int width , int height)
+	private int xCoordinate , yCoordinate , width , height ;
+
+
+	public Ball(int xCoordinate , int yCoordinate , int ballsize)
 	{
-		this.xCoor = xCoor;
-		this.yCoor = yCoor;
-		this.width = width;
-		this.height = height;
+		this.xCoordinate = xCoordinate;
+		this.yCoordinate = yCoordinate;
+		this.width = ballsize;
+		this.height = ballsize;
 	}
 	
 	public void draw(Graphics g)
 	{
-		g.fillRect( xCoor , yCoor , width ,  height);
 		g.setColor(Color.GREEN);
+		g.fillRect( xCoordinate * width , yCoordinate * height , width ,  height);
+
 	}
+
+	public int getxCoord()
+	{
+		return xCoordinate;
+	}
+
+	public void setxCoord(int xCoord)
+	{
+		this.xCoordinate = xCoord;
+	}
+
+	public int getyCoord()
+	{
+		return yCoordinate;
+	}
+
+	public void setyCoord(int yCoord)
+	{
+		this.yCoordinate = yCoord;
+	}
+
+
+
 }
