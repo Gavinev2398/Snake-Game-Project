@@ -23,9 +23,7 @@ public class SnakeBody {
 	}
 	
 
-	public void tick() {
 
-	}
 
 
 
@@ -37,7 +35,7 @@ public class SnakeBody {
 		
 		public void draw(Graphics g)
 		{
-			g.setColor(Color.BLUE);
+			g.setColor(Color.ORANGE);
 			g.fillRect(xCoordinate * width , yCoordinate * height  , width , height);
 
 		

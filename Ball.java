@@ -25,7 +25,7 @@ public class Ball  {
 	
 	public void draw(Graphics g)
 	{
-		g.setColor(Color.GREEN);
+		g.setColor(Color.BLUE);
 		g.fillRect( xCoordinate * width , yCoordinate * height , width ,  height);
 
 	}

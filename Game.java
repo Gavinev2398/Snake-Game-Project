@@ -27,16 +27,19 @@ public class Game extends JPanel implements Runnable {
 	private Ball b;
 	private int xCoordinate = 40, yCoordinate = 30;
 	private int size = 5;
-	private int speed = 0;
+	private int amtofticks = 0;
 	private Random rand;
 	private boolean up = false, down = false, left = false, right = true;
 	private Key key;
+	private int score = 0;
+
 
 
 	public Game() {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true); // needed for the JPanel to focus on the key Listener http://www.java-gaming.org/index.php/topic,25909. */
 		setLayout(new GridLayout(1, 1, 0, 0));
+		setOpaque(true);
 
 		snake = new ArrayList<SnakeBody>();
 		balls = new ArrayList<Ball>();
@@ -44,8 +47,13 @@ public class Game extends JPanel implements Runnable {
 		addKeyListener(key);
 
 
+        
+      
+        
+        
 		rand = new Random();
 		start();
+
 
 
 	}
@@ -73,21 +81,22 @@ public class Game extends JPanel implements Runnable {
 		}
           for(int i = 0;i < balls.size();i++) {
 			  if (xCoordinate == balls.get(i).getxCoord() && yCoordinate == balls.get(i).getyCoord()) {
-
+                   size++;
+                   score();
 				  balls.remove(i);
 				  i--;
 			  }
 		  }
 
-		speed++;
+         amtofticks++;
 
-		if (speed > 25000) {
+		if (amtofticks > 400000) {
 			if (up) yCoordinate--;
 			if (down) yCoordinate++;
 			if (right) xCoordinate++;
 			if (left) xCoordinate--;
 
-			speed = 0;
+			amtofticks = 0;
 			s = new SnakeBody(xCoordinate, yCoordinate, 10);
 			snake.add(s);
 
@@ -102,13 +111,14 @@ public class Game extends JPanel implements Runnable {
 	public void paint(Graphics g) {
 
 		g.clearRect(0, 0, WIDTH, HEIGHT);
-		g.setColor(Color.RED);
+		
+		g.setColor(Color.BLACK);
 
 
 		for (int i = 0; i < WIDTH; i++) {
 			g.drawLine(i * 10, 0, i * 10, HEIGHT);
 		}
-   	                                                       /* Method for the 10x10 Grid    http://stackoverflow.com/questions/8288827/how-can-i-create-a-square-10x10-grid-using-nested-for-loops-in-java */
+   	                                                       // Method for the 10x10 Grid    http://stackoverflow.com/questions/8288827/how-can-i-create-a-square-10x10-grid-using-nested-for-loops-in-java */
 		for (int i = 0; i < HEIGHT; i++) {
 			g.drawLine(0, i * 10, WIDTH, i * 10);
 		}
@@ -120,6 +130,8 @@ public class Game extends JPanel implements Runnable {
 		for (int i = 0; i < balls.size(); i++) {
 			balls.get(i).draw(g);
 		}
+		
+
 
 
 	}
@@ -129,6 +141,12 @@ public class Game extends JPanel implements Runnable {
 		running = true;
 		thread = new Thread(this, " Snake Game");
 		thread.start();                                 /* Intro to threads http://www.javaworld.com/article/2077138/java-concurrency/introduction-to-java-threads.html */
+	}
+	
+	public void score() {
+		score++;
+		
+	
 	}
 
 
@@ -188,6 +206,8 @@ public class Game extends JPanel implements Runnable {
 		}
 
 	}
+	
+	
 
 }
 
