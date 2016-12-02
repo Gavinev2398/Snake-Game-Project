@@ -1,13 +1,17 @@
 //Game.java
 
 
+
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.*;
 import java.awt.Graphics;
+import java.awt.Color;
 
 
 
@@ -18,7 +22,7 @@ import java.awt.Graphics;
 public class Game extends JPanel implements Runnable {
 
 
-	public static final int WIDTH = 750, HEIGHT = 550;
+	public static final int WIDTH = 900, HEIGHT = 650;
 	private boolean running = false;
 	private Thread thread;
 	private SnakeBody s;
@@ -32,14 +36,31 @@ public class Game extends JPanel implements Runnable {
 	private boolean up = false, down = false, left = false, right = true;
 	private Key key;
 	private int score = 0;
+	int dialogbutton = JOptionPane.YES_NO_OPTION;
+
 
 
 
 	public Game() {
+
+
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setFocusable(true); // needed for the JPanel to focus on the key Listener http://www.java-gaming.org/index.php/topic,25909. */
 		setLayout(new GridLayout(1, 1, 0, 0));
-		setOpaque(true);
+
+
+
+		setBackground(Color.BLACK);
+
+
+		JLabel scoreLabel = new JLabel();
+		scoreLabel.setForeground(Color.WHITE);
+		scoreLabel.setLocation(100,100);
+		scoreLabel.setText("Score" + score);
+
+         
+
+          
 
 		snake = new ArrayList<SnakeBody>();
 		balls = new ArrayList<Ball>();
@@ -63,6 +84,8 @@ public class Game extends JPanel implements Runnable {
 	{
 
 
+
+
 		if (snake.size() == 0) {
 			s = new SnakeBody(xCoordinate, yCoordinate, 10);
 			snake.add(s);
@@ -71,8 +94,8 @@ public class Game extends JPanel implements Runnable {
 
 		if (balls.size() == 0) {
 
-			int xCoordinate = rand.nextInt(80);
-			int yCoordinate = rand.nextInt(40);
+			int xCoordinate = rand.nextInt(30);
+			int yCoordinate = rand.nextInt(60);
 
 			b = new Ball(xCoordinate, yCoordinate, 10);
 			balls.add(b);
@@ -81,14 +104,16 @@ public class Game extends JPanel implements Runnable {
 		}
           for(int i = 0;i < balls.size();i++) {
 			  if (xCoordinate == balls.get(i).getxCoord() && yCoordinate == balls.get(i).getyCoord()) {
-                   size++;
-                   score();
-				  balls.remove(i);
+
+					  size++;
+
+						  score++;
+						  balls.remove(i);
 				  i--;
 			  }
 		  }
 
-         amtofticks++;
+          amtofticks++;
 
 		if (amtofticks > 400000) {
 			if (up) yCoordinate--;
@@ -104,15 +129,47 @@ public class Game extends JPanel implements Runnable {
 			if (snake.size() > size) {
 				snake.remove(0);
 			}
+
+
+					if(snake.size() > 15 )
+					{
+						  ImageIcon icon = new ImageIcon(Frame.class.getResource("snake1.png"));  /* Adding and image to JOptionPane http://stackoverflow.com/questions/13963392/add-image-to-joptionpane */
+                JOptionPane.showMessageDialog( null,"Congratulations you have caught 10 balls! ", "Congratulations", JOptionPane.INFORMATION_MESSAGE, icon);
+
+
+
+						stop();
+					}
+
+
+
+
+
 		}
 
 	}
 
-	public void paint(Graphics g) {
 
-		g.clearRect(0, 0, WIDTH, HEIGHT);
+
+
+
+	public void paint(Graphics g) {
 		
-		g.setColor(Color.BLACK);
+    	g.clearRect(0, 0, WIDTH, HEIGHT);
+
+      g.setColor(Color.BLACK);
+      g.fillRect(0,0,WIDTH,HEIGHT);
+
+
+
+		g.setColor(Color.RED);
+
+
+
+	
+
+
+
 
 
 		for (int i = 0; i < WIDTH; i++) {
@@ -130,11 +187,14 @@ public class Game extends JPanel implements Runnable {
 		for (int i = 0; i < balls.size(); i++) {
 			balls.get(i).draw(g);
 		}
-		
+
 
 
 
 	}
+
+
+
 
 
 	public void start() {
@@ -142,12 +202,15 @@ public class Game extends JPanel implements Runnable {
 		thread = new Thread(this, " Snake Game");
 		thread.start();                                 /* Intro to threads http://www.javaworld.com/article/2077138/java-concurrency/introduction-to-java-threads.html */
 	}
-	
-	public void score() {
-		score++;
-		
-	
-	}
+
+
+
+
+
+
+
+
+
 
 
 	public void run() {
@@ -156,6 +219,12 @@ public class Game extends JPanel implements Runnable {
 			tick();
 		}
 
+	}
+
+	public void stop()
+	{
+		running = false;
+		System.exit(0);
 	}
 
 	private class Key implements KeyListener {

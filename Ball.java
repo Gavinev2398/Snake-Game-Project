@@ -23,30 +23,34 @@ public class Ball  {
 		this.height = ballsize;
 	}
 	
-	public void draw(Graphics g)
+	public void draw(Graphics g)  /* https://docs.oracle.com/javase/7/docs/api/java/awt/Graphics.html */
 	{
-		g.setColor(Color.BLUE);
+		g.setColor(Color.GREEN);
 		g.fillRect( xCoordinate * width , yCoordinate * height , width ,  height);
 
 	}
 
 	public int getxCoord()
 	{
+
 		return xCoordinate;
 	}
 
 	public void setxCoord(int xCoord)
+
 	{
 		this.xCoordinate = xCoord;
 	}
 
 	public int getyCoord()
+
 	{
 		return yCoordinate;
 	}
 
 	public void setyCoord(int yCoord)
 	{
+
 		this.yCoordinate = yCoord;
 	}
 

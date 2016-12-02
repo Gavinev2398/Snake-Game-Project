@@ -23,24 +23,42 @@ public class SnakeBody {
 	}
 	
 
-
-
-
-
-
-
-
-	
-	  
 		
 		public void draw(Graphics g)
 		{
-			g.setColor(Color.ORANGE);
+			g.setColor(Color.BLUE);
 			g.fillRect(xCoordinate * width , yCoordinate * height  , width , height);
 
 		
 		    
 		}
+
+		public void setxCoords(int xCoordinate)
+		{
+
+			this.xCoordinate = xCoordinate;
+		}
+
+		public void setyCoords(int yCoordinate)
+
+		{
+			this.yCoordinate = yCoordinate;
+		}
+
+		public int  getxCoords()
+		{
+
+			return xCoordinate;
+		}
+
+		public int getyCoords()
+		{
+
+			return yCoordinate;
+		}
+
+
+
 		
 	
 }
