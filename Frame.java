@@ -4,12 +4,11 @@
 
 
 import java.awt.GridLayout;
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-
+import java.io.*;
+import java.net.URL;
 
 
 public class Frame extends JFrame implements ActionListener {
@@ -18,8 +17,11 @@ public class Frame extends JFrame implements ActionListener {
 	JMenu filenav , playernav , personnav;
 	JMenuItem fopen , fsave , fexit , dadd , ddisplay , ddelete ;
 	Person [] persons;
-	int count = 0;
+	int count;
 	String name;
+	public int score;
+
+
 
 
 
@@ -32,12 +34,15 @@ public class Frame extends JFrame implements ActionListener {
 		setTitle(" Snake Game ");
 		setLocationRelativeTo(null);
 	    setResizable(false);
+	    
+	    
 
             ImageIcon icon = new ImageIcon(Frame.class.getResource("snake1.png"));  /* Adding and image to JOptionPane http://stackoverflow.com/questions/13963392/add-image-to-joptionpane */
                 JOptionPane.showMessageDialog( null,"Todays challenge is to collect 10 balls good luck!", "Welcome to Snake!", JOptionPane.INFORMATION_MESSAGE, icon);
+		       SoundClipTest();
              
         
-
+           
               
 
 
@@ -73,6 +78,26 @@ public class Frame extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
+	}
+
+	public void  SoundClipTest() {     /* music for eating a ball https://www.ntu.edu.sg/home/ehchua/programming/java/J8c_PlayingSound.html */
+
+		try {
+			// Open an audio input stream.
+			URL url = this.getClass().getClassLoader().getResource("pacman_beginning.wav");
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+			// Get a sound clip resource.
+			Clip clip = AudioSystem.getClip();
+			// Open audio clip and load samples from the audio input stream.
+			clip.open(audioIn);
+			clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
 	}
 
 
@@ -126,25 +151,65 @@ public class Frame extends JFrame implements ActionListener {
 
 	}
 
-	public void save() throws IOException {
+	public void save()
+			throws IOException {
 		//	public void save(){// throws IOException {
 		ObjectOutputStream os;
 		os = new ObjectOutputStream(new FileOutputStream("users.dat"));
 		os.writeObject(persons);
 		os.close();
 	}
-	
-	
-	
+
+	public void open() {
+		count = 0;
+		try{
+			ObjectInputStream is;
+			is = new ObjectInputStream(new FileInputStream("users.dat"));
+			persons  = (Person []) is.readObject();
+			is.close();
+		}
+		catch(Exception e){
+			JOptionPane.showMessageDialog(null,"open didn't work");
+			e.printStackTrace();
+		}
 
 
-	public void Exit(){
-	  System.exit(0);
+		while (persons[count] !=null)
+			count++;
 	}
 
 
-	
-	
+
+
+
+
+	public void Exit(){
+
+		System.exit(0);
+	}
+
+
+	public void addPerson()
+	{
+		Person p1 = new Person();
+		p1.setName(JOptionPane.showInputDialog("Enter you name"));
+		persons[count] = p1;
+		count++;
+	}
+
+
+	public void display()
+	{
+		JTextArea area = new JTextArea();
+		if (count>0) {
+			area.setText("High Scores\n\n");
+			for (int i = 0; i<count; i++)
+				area.append("Our Players " + i + " " + persons[i].toString()+ score + "\n");
+			JOptionPane.showMessageDialog(null, area);
+		}
+		else
+			JOptionPane.showMessageDialog(null ,"No Players Found ");
+	}
 
 
 
@@ -155,7 +220,16 @@ public class Frame extends JFrame implements ActionListener {
 		}
 
 	else	if (e.getActionCommand().equals("Add")) {
+			addPerson();
+
 		     
+
+		}
+
+		else	if (e.getActionCommand().equals("Add")) {
+			open();
+
+
 
 		}
 		
@@ -171,12 +245,18 @@ public class Frame extends JFrame implements ActionListener {
 			}// catch
 
 
+		}
 
+		else if(e.getActionCommand().equals("Display")) {
+
+			display();
 		}
 
 
 
 	}
+
+
 
     
 	

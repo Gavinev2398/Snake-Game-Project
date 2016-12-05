@@ -3,12 +3,13 @@
 
 
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.*;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -23,7 +24,7 @@ public class Game extends JPanel implements Runnable {
 
 
 	public static final int WIDTH = 900, HEIGHT = 650;
-	private boolean running = false;
+	public boolean running = false;
 	private Thread thread;
 	private SnakeBody s;
 	private ArrayList<SnakeBody> snake;
@@ -33,10 +34,10 @@ public class Game extends JPanel implements Runnable {
 	private int size = 5;
 	private int amtofticks = 0;
 	private Random rand;
-	private boolean up = false, down = false, left = false, right = true;
+	private boolean up = false, down = false, left = false, right = false;
 	private Key key;
-	private int score = 0;
-	int dialogbutton = JOptionPane.YES_NO_OPTION;
+	public int score = 0;
+
 
 
 
@@ -50,13 +51,15 @@ public class Game extends JPanel implements Runnable {
 
 
 
+
+
+
+
 		setBackground(Color.BLACK);
 
 
-		JLabel scoreLabel = new JLabel();
-		scoreLabel.setForeground(Color.WHITE);
-		scoreLabel.setLocation(100,100);
-		scoreLabel.setText("Score" + score);
+
+
 
          
 
@@ -87,7 +90,7 @@ public class Game extends JPanel implements Runnable {
 
 
 		if (snake.size() == 0) {
-			s = new SnakeBody(xCoordinate, yCoordinate, 10);
+			s = new SnakeBody(xCoordinate, yCoordinate, 20);
 			snake.add(s);
 
 		}
@@ -106,7 +109,7 @@ public class Game extends JPanel implements Runnable {
 			  if (xCoordinate == balls.get(i).getxCoord() && yCoordinate == balls.get(i).getyCoord()) {
 
 					  size++;
-
+                       SoundClipTest();
 						  score++;
 						  balls.remove(i);
 				  i--;
@@ -115,7 +118,7 @@ public class Game extends JPanel implements Runnable {
 
           amtofticks++;
 
-		if (amtofticks > 400000) {
+		if (amtofticks > 40000) {
 			if (up) yCoordinate--;
 			if (down) yCoordinate++;
 			if (right) xCoordinate++;
@@ -134,15 +137,22 @@ public class Game extends JPanel implements Runnable {
 					if(snake.size() > 15 )
 					{
 						  ImageIcon icon = new ImageIcon(Frame.class.getResource("snake1.png"));  /* Adding and image to JOptionPane http://stackoverflow.com/questions/13963392/add-image-to-joptionpane */
+						  endgamemusic();
                 JOptionPane.showMessageDialog( null,"Congratulations you have caught 10 balls! ", "Congratulations", JOptionPane.INFORMATION_MESSAGE, icon);
 
-
+                     
 
 						stop();
 					}
 
+			     for(int i = 0;i < snake.size();i++)
+				 {
+					 if(xCoordinate == snake.get(i).getxCoords() && yCoordinate == snake.get(i).getyCoords())
+					 {
 
+					 }
 
+				 }
 
 
 		}
@@ -154,23 +164,23 @@ public class Game extends JPanel implements Runnable {
 
 
 	public void paint(Graphics g) {
+
+
 		
     	g.clearRect(0, 0, WIDTH, HEIGHT);
 
+
+
+
       g.setColor(Color.BLACK);
       g.fillRect(0,0,WIDTH,HEIGHT);
-
-
-
-		g.setColor(Color.RED);
-
 
 
 	
 
 
 
-
+		g.setColor(Color.BLACK);
 
 		for (int i = 0; i < WIDTH; i++) {
 			g.drawLine(i * 10, 0, i * 10, HEIGHT);
@@ -187,11 +197,53 @@ public class Game extends JPanel implements Runnable {
 		for (int i = 0; i < balls.size(); i++) {
 			balls.get(i).draw(g);
 		}
-
-
+        
+      	g.setColor(Color.RED);
+		g.drawString(" Balls Eaten : " + score , 10 , 10);
 
 
 	}
+
+	public void  SoundClipTest() {     /* music for eating a ball https://www.ntu.edu.sg/home/ehchua/programming/java/J8c_PlayingSound.html */
+
+		try {
+			// Open an audio input stream.
+			URL url = this.getClass().getClassLoader().getResource("pacman_eatfruit.wav");
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+			// Get a sound clip resource.
+			Clip clip = AudioSystem.getClip();
+			// Open audio clip and load samples from the audio input stream.
+			clip.open(audioIn);
+			clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void  endgamemusic() {
+
+		try {
+			// Open an audio input stream.
+			URL url = this.getClass().getClassLoader().getResource("cheer.wav");
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+			// Get a sound clip resource.
+			Clip clip = AudioSystem.getClip();
+			// Open audio clip and load samples from the audio input stream.
+			clip.open(audioIn);
+			clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 
 
